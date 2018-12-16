@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>文章详情</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    body {font-size:185%;}
+  </style>
+
+</head>
+
+<body class="bg3">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+  <div class="container">
+    <h1 class="navbar-item text-white">Blog</h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/posts">主页
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/<%= session[:user_id] %>">个人中心</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/feedbacks/new">意见反馈</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="/sessions/<%= session[:user_id]%>">退出登陆</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+  <div class="row">
+
+    <!-- Post Content Column -->
+    <div class="col-lg-8">
+
+      <!-- Title -->
+      <% flash[:position] = 'detail' %>
+      <% session[:position_comment] = 'post_comment' %>
+      <h1 class="mt-4" style="font-size: 200%"><%= @post.title %></h1>
+
+      <hr>
+
+      <!-- Post Content -->
+      <pre class="lead" style="font-size: 140%"><%= @post.content %></pre>
+
+      <hr>
+
+      <%= render 'comments/form' %>
+
+      <% if flash[:success] %>
+        <div class="alert alert-success"><%= flash[:success] %></div>
+        <% flash[:success] = nil %>
+      <% end %>
+      <% if flash[:notice] =~ /成功/ %>
+        <div class="alert alert-success text-center"><%= flash[:notice] %></div>
+      <% elsif flash[:notice] =~ /失败/ %>
+        <div class="alert alert-danger text-center"><%= flash[:notice] %></div>
+      <% end %>
+
+      <%= render @post.comments.where(audit: 1).order(created_at: :desc) %>
+
+      <% if session[:position] == 'profile' %>
+        <a href="/users/<%= session[:user_id] %>" class="btn btn-primary" style="font-size: 120%">返回个人中心</a>
+        <% session[:position] = nil %>
+      <% elsif session[:position] == 'profile_comment' %>
+        <a href="/users/show_comments" class="btn btn-primary" style="font-size: 120%">返回个人中心</a>
+        <% session[:position] = nil %>
+      <% else %>
+        <a href="/posts" class="btn btn-primary" style="font-size: 120%">返回主页</a>
+        <% session[:position] = nil %>
+      <% end %>
+    </div>
+    <!-- Sidebar Widgets Column -->
+    <div class="col-md-4">
+
+      <!-- Search Widget -->
+      <div class="card my-4">
+        <h1 class="card-header">文章信息</h1>
+        <div class="card-body">
+          <p>
+            <!-- Author -->
+            分类：<%= @post.category %><br>
+            作者：<%= @post.user.username %><br>
+            联系邮箱：<%= @post.user.email %><br>
+            <!-- Date/Time -->
+            发布于：<%= @post.created_at.localtime.to_s(:db) %><br>
+            更新于：<%= @post.updated_at.localtime.to_s(:db) %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

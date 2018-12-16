@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Message Board</title>
+  </head>
+  <body>
+    <a href="/new">Add New Message</a>
+    <h2>Message Board</h2>
+    <h3>Search message by ID or author:</h3>
+    <form action="/search" method="post">
+      ID:    <input type="text" name="id" value="">
+      Author:<input type="text" name="author" value="">
+      <input type="submit" value="Search">
+    </form>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Author</th>
+        <th>Created At</th>
+        <th>Message</th>
+        <th>Edit</th>
+      </tr>
+      <% @messages.each do |message_in_board| %>
+        <tr>
+          <td><%= message_in_board.id %></td>
+          <td><%= message_in_board.author %></td>
+          <td><%= message_in_board.created_at %></td>
+          <td><%= message_in_board.message %></td>
+          <td><a href="/delete/<%= message_in_board.id %>">Delete</a></td>
+        </tr>
+      <% end %>
+    </table>
+  </body>
+</html>

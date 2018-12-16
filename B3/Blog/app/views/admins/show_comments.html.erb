@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>评论管理</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    body {font-size:185%;}
+  </style>
+
+</head>
+
+<body class="bg3">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+  <div class="container">
+    <h1 class="navbar-item text-white">Blog</h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/admins">管理员中心
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="/sessions_admin/<%= session[:admin_id]%>">退出登陆</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-lg-2">
+
+      <h1 class="my-4" style="font-size: 160%">管理员中心</h1>
+      <h4 class="my-4" style="font-size: 130%">
+        您好！<%= @admin.username %>
+        <% flash[:position] = 'admin' %>
+        <% session[:position] = 'admin_comment' %>
+        <% session[:position_comment] = 'admin_comment' %>。
+      </h4>
+      <div class="list-group">
+        <a href="/admins/<%= session[:admin_id] %>" class="list-group-item">文章管理</a>
+        <a href="/admins/show_comments" class="list-group-item">评论管理</a>
+        <a href="/admins/show_feedbacks" class="list-group-item">反馈管理</a>
+      </div>
+
+    </div>
+    <!-- /.col-lg-3 -->
+
+    <div class="col-lg-10">
+      <h1 class="text-center" style="font-size: 200%">评论列表</h1>
+      <% if flash[:notice] =~ /成功/ %>
+        <div class="alert alert-success text-center"><%= flash[:notice] %></div>
+      <% elsif flash[:notice] =~ /失败/ %>
+        <div class="alert alert-danger text-center"><%= flash[:notice] %></div>
+      <% end %>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>所在文章标题</th>
+          <th>内容</th>
+          <th>创建时间</th>
+          <th>审核状态</th>
+          <th>管理</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @comments.each do |comment| %>
+          <tr>
+            <td><%= comment.post.title %></td>
+            <td><%= comment.content %></td>
+            <td><%= comment.created_at.localtime.to_s(:db) %></td>
+            <td>
+              <% if comment.audit == 0 %>
+                <p>待审核</p>
+              <% elsif comment.audit == 1 %>
+                <p class="text-success">通过</p>
+              <% else %>
+                <p class="text-danger">未通过</p>
+              <% end %>
+            </td>
+            <td>
+              <a href="/posts/<%= comment.post.id %>/admin" class="btn btn-primary" style="font-size: 85%">查看所在文章</a>
+              <a href="/comments/<%= comment.id %>/audit_success" class="btn btn-success" style="font-size: 85%">通过</a>
+              <a href="/comments/<%= comment.id %>/audit_failed" class="btn btn-danger" style="font-size: 85%">拒绝</a>
+              <%= link_to('删除', [comment.post, comment], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', style: 'font-size: 85%') %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      <%= paginate @comments %>
+    </div>
+    <!-- /.col-lg-9 -->
+
+  </div>
+  <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

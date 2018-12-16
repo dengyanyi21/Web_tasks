@@ -1,0 +1,28 @@
+# MySQL version 5.7.x
+#   gem install mysql2
+#
+#   Ensure the MySQL 2 gem is defined in your Gemfile
+#   gem 'mysql2'
+#
+default: &default
+  encoding: utf8
+  adapter: mysql2
+  pool: 5
+  username: root
+  password: d
+
+development:
+  <<: *default
+  database: Blog
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+
+test:
+  <<: *default
+  database: Blog
+
+production:
+  <<: *default
+  database: Blog

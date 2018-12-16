@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>创建新管理员</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    body {
+      font-size:185%;
+    }
+  </style>
+
+</head>
+
+<body class="bg2">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+  <div class="container">
+    <h1 class="navbar-item text-white">Blog</h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="">Please login first</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <br><br>
+  <h1 class="text-center" style="font-size: 200%">管理员注册</h1>
+  <form action="/admins" method="post">
+    <div class="form-group">
+      <label for="username" class="control-label col-lg-offset-4" style="font-size: 120%">管理员用户名</label>
+      <input type="text" name="username" class="form-control col-lg-offset-4 col-lg-4" placeholder="Username" style="font-size: 120%">
+    </div>
+    <div class="form-group">
+      <label for="password" class="control-label col-lg-offset-4" style="font-size: 120%">密码（至少为6位）</label>
+      <input type="password" name="password" class="form-control col-lg-offset-4 col-lg-4" placeholder="Password" style="font-size: 120%">
+    </div>
+    <div class="form-group">
+      <label for="password_confirmation" class="control-label col-lg-offset-4" style="font-size: 120%">确认密码</label>
+      <input type="password" name="password_confirmation" class="form-control col-lg-offset-4 col-lg-4" placeholder="Password" style="font-size: 120%">
+    </div>
+    <div class="form-group">
+      <label for="admin_code" class="control-label col-lg-offset-4" style="font-size: 120%">管理员注册码</label>
+      <input type="text" name="admin_code" class="form-control col-lg-offset-4 col-lg-4" placeholder="Code" style="font-size: 120%">
+    </div>
+    <div class="form-group">
+      <input type="submit" class="btn btn-success col-lg-offset-4" style="font-size: 100%" value="注册"/>
+      <a href="/sessions_admin/new" class="btn btn-primary" style="font-size: 100%">登陆界面</a>
+    </div>
+  </form>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-danger col-lg-offset-4 col-lg-4"><%= flash[:notice] %></div>
+    <% flash[:notice] = nil %>
+  <% end %>
+  <% if @admin.errors.any? %>
+    <div class="alert alert-danger col-lg-offset-4 col-lg-4">
+      <ol>
+        <% @admin.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ol>
+    </div>
+  <% end %>
+</div>
+<!-- /.container -->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

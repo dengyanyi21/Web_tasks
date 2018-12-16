@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Message Board</title>
+  </head>
+  <body>
+    <h2>Search Result</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Author</th>
+        <th>Created At</th>
+        <th>Message</th>
+        <th>Edit</th>
+      </tr>
+      <% @messages.each do |message_in_board| %>
+        <tr>
+          <td><%= message_in_board.id %></td>
+          <td><%= message_in_board.author %></td>
+          <td><%= message_in_board.created_at %></td>
+          <td><%= message_in_board.message %></td>
+          <td><a href="/delete/<%= message_in_board.id %>">Delete</a></td>
+        </tr>
+      <% end %>
+    </table>
+    <a href="/">返回主页</a>
+  </body>
+</html>

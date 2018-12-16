@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>搜索结果</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    body {font-size:185%;}
+  </style>
+
+</head>
+
+<body class="bg3">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+  <div class="container">
+    <h1 class="navbar-item text-white">Blog</h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/posts">主页
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/<%= session[:user_id] %>">个人中心</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/feedbacks/new">意见反馈</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="/sessions/<%= session[:user_id]%>">退出登陆</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+  <div class="row">
+
+    <!-- Blog Entries Column -->
+    <div class="col-md-8">
+
+      <h1 class="my-4 col-md-offset-2" style="font-size: 170%">创建日期为"<%= @date %>"的文章有:</h1>
+
+      <%= render 'table' %>
+
+    </div>
+
+    <!-- Sidebar Widgets Column -->
+    <div class="col-md-4">
+      <!-- New Post Widget -->
+      <div class="card my-4">
+        <a href="/posts/new" class="btn btn-primary" style="font-size: 110%">发布新文章</a>
+      </div>
+
+      <!-- Search Widget -->
+      <div class="card my-4">
+        <h1 class="card-header">搜索</h1>
+        <div class="card-body">
+          <div class="input-group">
+            <%= form_tag 'result_date', method: 'get' do %>
+              <p>
+                <label for="date">搜索指定日期文章：</label><br>
+                <%= select_date Date.today, prefix: :date %>
+                <input type="submit" value="搜索" style="font-size: 90%"/>
+              </p>
+              <p style="font-size: 100%">
+                <% if flash[:notice_date] %>
+                <div class="alert alert-danger"><%= flash[:notice_date] %></div>
+                  <% flash[:notice_date] = nil %>
+                <% end %>
+              </p>
+            <% end %>
+          </div>
+          <div class="input-group">
+            <%= form_tag 'result_category', method: 'get' do %>
+              <p>
+                <label for="category">搜索指定分类文章：</label><br>
+                <%= text_field_tag :category, params[:category], class: 'form-control' %>
+                <input type="submit" value="搜索" style="font-size: 90%"/>
+              </p>
+              <p style="font-size: 100%">
+                <% if flash[:notice_category] %>
+                <div class="alert alert-danger"><%= flash[:notice_category] %></div>
+                  <% flash[:notice_category] = nil %>
+                <% end %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+<!-- Single Comment -->
+<div class="media mb-4">
+  <div class="media-body">
+    <h5 class="mt-0" style="font-size: 150%"><%= comment.user.username %><small>联系邮箱：<%= comment.user.email %></small></h5>
+    <pre style="font-size: 120%"><%= comment.content %></pre>
+    评论时间：<%= comment.created_at.localtime.to_s(:db) %>&nbsp;&nbsp;
+    <%= link_to '删除', [comment.post, comment], method: :delete, data: { confirm: 'Are you sure?' } %>
+    <hr>
+  </div>
+</div>

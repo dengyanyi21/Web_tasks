@@ -1,0 +1,46 @@
+namespace :db do
+  require 'active_record'
+  require 'yaml'
+
+  desc "加载项目表数据到数据库"
+  task :init => :dbenv do
+    file = "db/schema.rb"
+    load(file) # 参考 rails 文件结构
+  end
+
+  desc "创建数据库初始化数据"
+  task :seed => :dbenv do
+    seed_file = File.join(File.dirname(__FILE__), 'db', 'seeds.rb')
+    load(seed_file) if File.exist?(seed_file)
+  end
+
+  desc "合并 db/migrate 目录下的数据库文件"
+  task :migrate => :dbenv do
+    ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
+    ActiveRecord::Migrator.migrate("db/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+    Rake::Task["db:schema:dump"].invoke if ActiveRecord::Base.schema_format == :ruby
+  end
+
+  desc '设定 STEP=n 回滚之前版本的数据库结构'
+  task :rollback => :dbenv do
+    step = ENV['STEP'] ? ENV['STEP'].to_i : 1
+    ActiveRecord::Migrator.rollback('db/migrate/', step)
+    Rake::Task["db:schema:dump"].invoke if ActiveRecord::Base.schema_format == :ruby
+  end
+
+  task :dbenv do
+    dbname = ENV['db'] || 'development'
+    $dbconfig = YAML::load('db/database.yml')
+    ActiveRecord::Base.establish_connection($dbconfig[dbname])
+  end
+
+  namespace :schema do
+    desc "把数据库结构写入 db/schema.rb 文件"
+    task :dump => :dbenv do
+      require 'active_record/schema_dumper'
+      File.open(ENV['SCHEMA'] || "db/schema.rb", "w") do |file|
+        ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
+      end
+    end
+  end
+end

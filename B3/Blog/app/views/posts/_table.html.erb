@@ -1,0 +1,21 @@
+<% @posts.each do |post| %>
+<!-- Blog Post -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h1 class="card-title" style="font-size: 150%"><%= post.title %></h1>
+    <p class="card-text" style="font-size: 90%">分类：<%= post.category %>&nbsp;&nbsp;&nbsp;作者：<%= post.user.username %></p>
+    <p class="card-text" style="font-size: 90%">
+      <% if post.content.length > 75 %>
+        <%= post.content[0..75] + '....' %>
+      <% else %>
+        <%= post.content %>
+      <% end %>
+    </p>
+    <a href="/posts/<%= post.id %>" class="btn btn-primary" style="font-size: 85%">查看内容 &rarr;</a>
+  </div>
+  <div class="card-footer text-muted" style="font-size: 80%">
+    发布于：<%= post.created_at.localtime.to_s(:db) %>
+  </div>
+</div>
+<% end %>
+<%= paginate @posts %>
